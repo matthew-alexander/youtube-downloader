@@ -19,10 +19,11 @@ namespace YOUTUBE_DOWNLOADER_2
  
          //Returns VideoInfo object (Only for video model) 
          public static VideoInfo GetVideoInfo(YouTubeVideoModel videoModel)
-         { 
-             //Select the first .mp4 video with 360p resolution 
-             VideoInfo video = videoModel.VideoInfo.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360); 
-             return video; 
+         {
+            //Select the first .mp4 video with 360p (changed to 720) resolution 
+            //VideoInfo video = videoModel.VideoInfo.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+            VideoInfo video = videoModel.VideoInfo.First();
+            return video; 
          } 
  
  

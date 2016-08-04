@@ -74,20 +74,31 @@ namespace YOUTUBE_DOWNLOADER_2
 
         private void DownloadAudio(YouTubeAudioModel audioDownloader)
         {
-            //try
-            //{
-            //    videoDownloader.VideoInfo = FileDownloader.GetVideoInfos(videoDownloader);
-            //    videoDownloader.Video = FileDownloader.GetVideoInfo(videoDownloader);
-            //    videoDownloader.FilePath = FileDownloader.GetPath(videoDownloader);
-            //    videoDownloader.FilePath += videoDownloader.Video.VideoExtension;
-            //    videoDownloader.VideoDownloaderType = FileDownloader.GetVideoDownloader(videoDownloader);
-            //    FileDownloader.DownloadVideo(videoDownloader);
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("Download Cancelled.");
-            //    EnableAccessibility();
-            //}
+            try
+            {
+                audioDownloader.VideoInfo = FileDownloader.GetVideoInfos(audioDownloader);
+                audioDownloader.Video = FileDownloader.GetVideoInfoAudioOnly(audioDownloader);
+                lblFileName.Text = audioDownloader.Video.Title + audioDownloader.Video.AudioExtension;
+                audioDownloader.FilePath = FileDownloader.GetPath(audioDownloader);
+                audioDownloader.FilePath += audioDownloader.Video.AudioExtension;
+
+                audioDownloader.AudioDownloaderType = FileDownloader.GetAudioDownloader(audioDownloader);
+
+                //events that do code when things happen
+                audioDownloader.AudioDownloaderType.DownloadFinished += (sender, args) => EnableAccessibility();
+                //open the folder with downloaded file selected
+                audioDownloader.AudioDownloaderType.DownloadFinished += (sender, args) => OpenFolder(audioDownloader.FilePath);
+                audioDownloader.AudioDownloaderType.DownloadProgressChanged += (sender, args) => pgDownload.Value = (int)args.ProgressPercentage;
+                CheckForIllegalCrossThreadCalls = false;
+
+                FileDownloader.DownloadAudio(audioDownloader); 
+                 
+            }
+            catch
+            {
+                MessageBox.Show("Download Cancelled.");
+                EnableAccessibility(); 
+            }
         }
 
         private void DownloadVideo(YouTubeVideoModel videoDownloader)
